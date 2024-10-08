@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Arina {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

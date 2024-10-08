@@ -9,11 +9,11 @@
 
 <header th:insert="blocks/header :: header"></header>
 <div th:each="el : ${list}" class="alert alert-info mt-2">
-    <h3 th:text="${el.title}"/>
-    <h3 th:text="${el.author}"/>
-    <h3 th:text="${el.status}"/>
-    <h3 th:text="${el.ISBN}"/>
-    <h3 th:text="${el.value}"/>
+    <h2 th:text="${el.title}"/>
+    <h2 th:text="${el.author}"/>
+    <h2 th:text="${el.status}"/>
+    <h2 th:text="${el.ISBN}"/>
+    <h2 th:text="${el.value}"/>
 
 </div>
 
