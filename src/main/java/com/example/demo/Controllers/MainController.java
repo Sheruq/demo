@@ -1,6 +1,6 @@
 package com.example.demo.Controllers;
 
-import com.example.demo.models.list;
+import com.example.demo.models.Arina;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +16,7 @@ public class MainController {
 private listRepo listRepo;
     @GetMapping("/")
     public String home(Model model) {
-        Iterable<list> lists = listRepo.findAll();
+        Iterable<Arina> lists = listRepo.findAll();
         model.addAttribute("list", lists);
         model.addAttribute("title", "Бібліотека Онлайн");
         return "home";
@@ -29,9 +29,9 @@ private listRepo listRepo;
     }
 
     @PostMapping("/insert")
-    public String insertlist(@RequestParam String title, @RequestParam String author,@RequestParam String status,@RequestParam int ISBN,@RequestParam byte value,Model model){
-        list list = new list(title, author, status,ISBN,value);
-        listRepo.save(list);
+    public String sending(@RequestParam String title, @RequestParam String author,@RequestParam String status,@RequestParam int ISBN,@RequestParam int value,Model model){
+         Arina arina = new Arina(title, author, status,ISBN,value);
+        listRepo.save(arina);
         return "redirect:/";
     }
 

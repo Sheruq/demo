@@ -6,14 +6,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class list {
+public class Arina {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String title,author,status;
     private int ISBN;
-    private byte value;
+    private int value;
 
     public Long getId() {
         return id;
@@ -55,17 +55,18 @@ public class list {
         this.ISBN = ISBN;
     }
 
-    public byte getValue() {
+    public int getValue() {
         return value;
     }
 
-    public void setValue(byte value) {
+    public void setValue(int value) {
         this.value = value;
     }
-    public list(){
 
+    public Arina() {
     }
-    public list(String title, String author, String status, int ISBN, byte value) {
+
+    public Arina(String title, String author, String status, int ISBN, int value) {
         this.title = title;
         this.author = author;
         this.status = status;
