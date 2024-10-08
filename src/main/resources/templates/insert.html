@@ -9,10 +9,21 @@
 
 <header th:insert="blocks/header :: header"></header>
 
-<div class="container mt-5">
+
+<div class="container mt-5 mb-5">
+    <h1>Додавання книги</h1>
+    <form action="/insert" metod="list">
+        <input type="text" name="title" placeholder="Введіть назву книги" class="form-control"><br>
+        <input type="text" name="author" placeholder="Введіть автора книги" class="form-control"><br>
+        <input type="text" name="status" placeholder="Введіть стутус книги" class="form-control"><br>
+        <input type="text" name="ISBN" placeholder="Введіть ISBN" class="form-control"><br>
+        <input type="text" name="value" placeholder="Введіть к-сть наявних книг" class="form-control"><br>
+        <button type="submit" class="btn btn-success">Додати книгу</button>
+    </form>
 </div>
 
 
 <footer th:insert="blocks/footer :: footer"></footer>
+
 </body>
 </html>

@@ -1,4 +1,4 @@
-package models;
+package com.example.demo.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -60,6 +60,16 @@ public class list {
     }
 
     public void setValue(byte value) {
+        this.value = value;
+    }
+    public list(){
+
+    }
+    public list(String title, String author, String status, int ISBN, byte value) {
+        this.title = title;
+        this.author = author;
+        this.status = status;
+        this.ISBN = ISBN;
         this.value = value;
     }
 }
