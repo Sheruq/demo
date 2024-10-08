@@ -18,14 +18,16 @@ public class MainController {
 
     @GetMapping("/")
     public String home(Model model) {
-        model.addAttribute("title","Головна");
+        Iterable<Arina> Arinass = ariRepo.findAll();
+        Arinass.forEach(arina -> System.out.println(arina.getTitle()));  // логування
+        model.addAttribute("Arinass", Arinass);
+        model.addAttribute("title", "Головна");
         return "home";
     }
 
+
     @GetMapping("/insert")
     public String insertadd(Model model) {
-        Iterable<Arina> Arinass = ariRepo.findAll();
-        model.addAttribute("Arinass", Arinass);
         model.addAttribute("title","Додати книгу");
         return "insert";
     }
