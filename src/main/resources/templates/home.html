@@ -16,9 +16,11 @@
         <p th:text="${el.status}"></p>
         <p th:text="${el.ISBN}"></p>
         <p th:text="${el.value}"></p>
-        <a th:href=" '/'+ ${el.id} + '/edit'" class="btn btn-warning">Редагувати</a>
-        <a th:href=" '/'+ ${el.id} + '/remove'" class="btn btn-warning">Видалити</a>
+        <a th:href="@{/{id}/edit(id=${el.id})}" class="btn btn-warning">Редагувати</a>
 
+        <form th:action="@{/{id}/remove(id=${el.id})}" method="post" style="display:inline;">
+            <button type="submit" class="btn btn-danger">Видалити</button>
+        </form>
     </div>
 </div>
 

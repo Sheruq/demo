@@ -51,7 +51,7 @@ public class MainController {
         }
         Optional<Arina> post = AriRepo.findById(id);
         if (post.isPresent()) {
-            model.addAttribute("post", post.get()); // Передай сам об'єкт, а не список
+            model.addAttribute("post", post.get());
         }
         return "edit";
     }
@@ -73,8 +73,17 @@ public class MainController {
             arina.setValue(value);
             AriRepo.save(arina);
         }
-        return "redirect:/"; // Повертаємось на головну сторінку після редагування
+        return "redirect:/";
     }
+
+    @PostMapping("/{id}/remove")
+    public String RemoveBook(@PathVariable(value = "id") long id) {
+        if (AriRepo.existsById(id)) {
+            AriRepo.deleteById(id);
+        }
+        return "redirect:/";
+    }
+
 
 
 }
