@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Редагування книги</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+<header th:insert="blocks/header :: header"></header>
+
+
+<div class="container mt-5 mb-5">
+    <h1>Редагування книги</h1>
+    <div th:text="${post}"></div>
+    <form method="post">
+        <input type="text" th:value="${post.title}" name="title" placeholder="Введіть назву книги" class="form-control"><br>
+        <input type="text" th:value="${post.author}" name="author" placeholder="Введіть автора книги" class="form-control"><br>
+        <input type="text" th:value="${post.status}" name="status" placeholder="Введіть стутус книги" class="form-control"><br>
+        <input type="text" th:value="${post.ISBN}" name="ISBN" placeholder="Введіть ISBN" class="form-control"><br>
+        <input type="text" th:value="${post.value}" name="value" placeholder="Введіть к-сть наявних книг" class="form-control"><br>
+        <button type="submit" class="btn btn-success">Обновити</button>
+    </form>
+</div>
+</div>
+
+
+<footer th:insert="blocks/footer :: footer"></footer>
+
+</body>
+</html>
