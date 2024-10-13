@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${title}"></title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+<header th:insert="blocks/header :: header"></header>
+
+<div class="container mt-5">
+    <h1 th:text="${user.name}"></h1>
+    <p th:text="${user.email}"></p>
+
+    <h2>Видані книги</h2>
+    <ul class="list-group">
+        <li th:each="book : ${borrowedBooks}" class="list-group-item" th:text="${book.title}"></li>
+    </ul>
+
+    <a th:href="@{/users}" class="btn btn-secondary mt-3">Назад до списку користувачів</a>
+</div>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
