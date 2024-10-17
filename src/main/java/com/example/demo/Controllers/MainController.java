@@ -85,11 +85,58 @@ public class MainController {
 
     @PostMapping("/{id}/remove")
     public String RemoveBook(@PathVariable(value = "id") long id) {
-        if (AriRepo.existsById(id)) {
-            AriRepo.deleteById(id);
+        try {
+            System.out.println("Видалення книги з ID: " + id); // Додайте логування
+            if (AriRepo.existsById(id)) {
+                AriRepo.deleteById(id);
+            } else {
+                System.out.println("Книга з ID " + id + " не знайдена");
+            }
+        } catch (Exception e) {
+            System.err.println("Помилка під час видалення: " + e.getMessage()); // Логування помилки
+            e.printStackTrace(); // Виводимо стек викликів
         }
         return "redirect:/";
     }
+
+    @PostMapping("/users/{userId}/return/{bookId}")
+    public String returnBook(@PathVariable("userId") long userId, @PathVariable("bookId") long bookId) {
+        Optional<User> userOptional = userRepo.findById(userId);
+        Optional<Arina> bookOptional = AriRepo.findById(bookId);
+
+        if (userOptional.isPresent() && bookOptional.isPresent()) {
+            User user = userOptional.get();
+            Arina book = bookOptional.get();
+
+            // Видалити книгу з borrowedBooks
+            user.getBorrowedBooks().remove(book);
+            userRepo.save(user); // Зберегти зміни в користувачі
+
+            // Повернути книгу в бібліотеку (можна додати логіку для збільшення кількості доступних книг)
+            book.setValue(book.getValue() + 1);
+            AriRepo.save(book); // Зберегти зміни в книзі
+        }
+        return "redirect:/users"; // Перенаправлення після успішного повернення
+    }
+
+
+    @PostMapping("/users/removeBook/{bookId}")
+    public String removeBookFromUser(@PathVariable("bookId") long bookId, @RequestParam("userId") long userId) {
+        Optional<User> user = userRepo.findById(userId);
+        Optional<Arina> book = AriRepo.findById(bookId);
+
+        if (user.isPresent() && book.isPresent()) {
+            User u = user.get();
+            Arina b = book.get();
+
+            // Вилучаємо книгу у користувача
+            u.removeBook(b); // Викликаємо метод для видалення книги
+            userRepo.save(u); // Зберігаємо зміни у користувача
+        }
+        return "redirect:/users"; // Перенаправлення після успішного вилучення
+    }
+
+
 
     @PostMapping("/users/lend/{bookId}")
     public String lendBook(@PathVariable("bookId") long bookId, @RequestParam("userId") long userId) {

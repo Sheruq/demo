@@ -15,7 +15,13 @@
 
     <h2>Видані книги</h2>
     <ul class="list-group">
-        <li th:each="book : ${borrowedBooks}" class="list-group-item" th:text="${book.title}"></li>
+        <li th:each="book : ${borrowedBooks}" class="list-group-item">
+            <span th:text="${book.title}"></span>
+            <!-- Форма для видалення книги у користувача -->
+            <form th:action="@{/users/{userId}/return/{bookId}(userId=${user.id}, bookId=${book.id})}" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-danger btn-sm float-end" onclick="return confirm('Ви впевнені, що хочете повернути цю книгу?');">Повернути книгу</button>
+            </form>
+        </li>
     </ul>
 
     <a th:href="@{/users}" class="btn btn-secondary mt-3">Назад до списку користувачів</a>

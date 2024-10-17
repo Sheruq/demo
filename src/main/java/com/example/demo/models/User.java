@@ -15,6 +15,11 @@ public class User {
     @ManyToMany
     private List<Arina> borrowedBooks = new ArrayList<>(); // Ініціалізуємо список
 
+    public void removeBook(Arina book) {
+        this.borrowedBooks.remove(book); // Вилучаємо книгу з списку
+    }
+
+
     // Конструктори
     public User() {
     }
