@@ -11,6 +11,20 @@
 
 <div class="container mt-5">
     <h1 th:text="${title}"></h1>
+
+    <!-- Форма пошуку -->
+    <form action="#" th:action="@{/users/search}" method="get" class="mb-4">
+        <div class="row">
+            <div class="col-md-6">
+                <input type="text" name="bookTitle" class="form-control" placeholder="Пошук за назвою книги" />
+            </div>
+            <div class="col-md-6">
+                <input type="text" name="userName" class="form-control" placeholder="Пошук за іменем користувача" />
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Пошук</button>
+    </form>
+
     <a th:href="@{/users/add}" class="btn btn-success mb-3">Додати користувача</a>
 
     <!-- Список Користувачів -->

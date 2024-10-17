@@ -109,6 +109,27 @@ public class UserController {
         return "redirect:/users"; // Повертаємося до списку користувачів після видалення
     }
 
+    @GetMapping("/users/search")
+    public String search(@RequestParam(required = false) String bookTitle,
+                         @RequestParam(required = false) String userName,
+                         Model model) {
+        Iterable<User> users = userRepo.findAll();
+        Iterable<Arina> books = ariRepo.findAll();
+
+        if (bookTitle != null && !bookTitle.isEmpty()) {
+            books = ariRepo.findByTitleContainingIgnoreCase(bookTitle); // Пошук книг за назвою
+        }
+
+        if (userName != null && !userName.isEmpty()) {
+            users = userRepo.findByNameContainingIgnoreCase(userName); // Пошук користувачів за іменем
+        }
+
+        model.addAttribute("users", users);
+        model.addAttribute("books", books);
+        model.addAttribute("title", "Пошук");
+        return "users"; // Шаблон, який відображає результати
+    }
+
 
 }
 

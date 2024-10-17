@@ -131,12 +131,17 @@ public class MainController {
             user.getBorrowedBooks().remove(book);
             userRepo.save(user); // Зберегти зміни в користувачі
 
-            // Повернути книгу в бібліотеку (можна додати логіку для збільшення кількості доступних книг)
+            // Повернути книгу в бібліотеку
             book.setValue(book.getValue() + 1);
             AriRepo.save(book); // Зберегти зміни в книзі
+
+            // Додати запис до журналу дій
+            ActionLog log = new ActionLog("Повернення книги", "Користувач " + user.getName() + " повернув книгу '" + book.getTitle() + "'");
+            ActionLogRepo.save(log);
         }
         return "redirect:/users"; // Перенаправлення після успішного повернення
     }
+
 
 
     @PostMapping("/users/removeBook/{bookId}")
@@ -154,6 +159,7 @@ public class MainController {
         }
         return "redirect:/users"; // Перенаправлення після успішного вилучення
     }
+
     @GetMapping("/logs")
     public String showLogs(Model model) {
         Iterable<ActionLog> logs = ActionLogRepo.findAll();
@@ -186,6 +192,18 @@ public class MainController {
             }
         }
         return "redirect:/users"; // Перенаправлення після успішної видачі
+    }
+
+    @GetMapping("/books/search")
+    public String searchBooks(@RequestParam String query, Model model) {
+        Iterable<Arina> arinass = AriRepo.findByTitleContainingOrAuthorContaining(query, query);
+        Iterable<User> users = userRepo.findAll();
+
+        model.addAttribute("Arinass", arinass);
+        model.addAttribute("users", users);
+        model.addAttribute("title", "Результати пошуку: " + query);
+
+        return "home"; // Повертаємо до того ж шаблону для відображення результатів
     }
 
 
