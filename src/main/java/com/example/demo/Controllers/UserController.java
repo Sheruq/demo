@@ -1,16 +1,15 @@
 package com.example.demo.Controllers;
 
+import com.example.demo.models.ActionLog;
 import com.example.demo.models.Arina;
 import com.example.demo.models.User;
+import com.example.demo.repo.ActionLogRepo;
 import com.example.demo.repo.AriRepo;
 import com.example.demo.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -19,6 +18,9 @@ public class UserController {
 
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private ActionLogRepo ActionLogRepo;
 
     @Autowired
     private AriRepo ariRepo;
@@ -42,10 +44,14 @@ public class UserController {
         return "add_user";
     }
 
+
     @PostMapping("/users/add")
     public String addUser(@RequestParam String name, @RequestParam String email) {
         User user = new User(name, email);
         userRepo.save(user);
+        // Додати запис до журналу дій
+        ActionLog log = new ActionLog("Додавання користувача", "Користувач " + user.getName() + " був доданий");
+        ActionLogRepo.save(log);
         return "redirect:/users";
     }
 
@@ -64,10 +70,15 @@ public class UserController {
                 b.setValue(b.getValue() - 1); // Зменшуємо кількість доступних книг
                 userRepo.save(u);
                 ariRepo.save(b);
+
+                // Додати запис до журналу дій
+                ActionLog log = new ActionLog("Видача книги", "Користувач " + u.getName() + " отримав книгу '" + b.getTitle() + "'");
+                ActionLogRepo.save(log);
             }
         }
-        return "redirect:/users";
+        return "redirect:/users"; // Перенаправлення після успішної видачі
     }
+
 
     // Перегляд виданих книг для конкретного користувача
     @GetMapping("/users/{id}")
@@ -85,7 +96,15 @@ public class UserController {
     @PostMapping("/users/{id}/remove")
     public String removeUser(@PathVariable("id") long id) {
         if (userRepo.existsById(id)) {
-            userRepo.deleteById(id);
+            // Отримати ім'я користувача для логування
+            User user = userRepo.findById(id).orElse(null);
+            if (user != null) {
+                userRepo.deleteById(id);
+
+                // Додати запис до журналу дій
+                ActionLog log = new ActionLog("Видалення користувача", "Користувач " + user.getName() + " був видалений");
+                ActionLogRepo.save(log);
+            }
         }
         return "redirect:/users"; // Повертаємося до списку користувачів після видалення
     }

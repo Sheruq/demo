@@ -1,7 +1,9 @@
 package com.example.demo.Controllers;
 
+import com.example.demo.models.ActionLog;
 import com.example.demo.models.Arina;
 import com.example.demo.models.User;
+import com.example.demo.repo.ActionLogRepo;
 import com.example.demo.repo.AriRepo;
 import com.example.demo.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ public class MainController {
 
     @Autowired
     private AriRepo AriRepo;
+
+    @Autowired
+    private ActionLogRepo ActionLogRepo;
 
     @Autowired
     private UserRepo userRepo;
@@ -48,6 +53,11 @@ public class MainController {
     public String insertPostAdd(@RequestParam String title, @RequestParam String author, @RequestParam String status, @RequestParam int ISBN, @RequestParam int value, Model model) {
         Arina arina = new Arina(title, author, status, ISBN, value);
         AriRepo.save(arina);
+
+        // Додаємо запис у журнал дій
+        ActionLog log = new ActionLog("Додавання", "Книга '" + title + "' додана до бібліотеки");
+        ActionLogRepo.save(log);
+
         return "redirect:/";
     }
 
@@ -88,7 +98,15 @@ public class MainController {
         try {
             System.out.println("Видалення книги з ID: " + id); // Додайте логування
             if (AriRepo.existsById(id)) {
-                AriRepo.deleteById(id);
+                // Отримати дані книги для логування
+                Arina book = AriRepo.findById(id).orElse(null);
+                if (book != null) {
+                    AriRepo.deleteById(id);
+
+                    // Додати запис до журналу дій
+                    ActionLog log = new ActionLog("Видалення книги", "Книга '" + book.getTitle() + "' була видалена з бібліотеки");
+                    ActionLogRepo.save(log);
+                }
             } else {
                 System.out.println("Книга з ID " + id + " не знайдена");
             }
@@ -96,8 +114,9 @@ public class MainController {
             System.err.println("Помилка під час видалення: " + e.getMessage()); // Логування помилки
             e.printStackTrace(); // Виводимо стек викликів
         }
-        return "redirect:/";
+        return "redirect:/"; // Перенаправлення після видалення
     }
+
 
     @PostMapping("/users/{userId}/return/{bookId}")
     public String returnBook(@PathVariable("userId") long userId, @PathVariable("bookId") long bookId) {
@@ -135,6 +154,13 @@ public class MainController {
         }
         return "redirect:/users"; // Перенаправлення після успішного вилучення
     }
+    @GetMapping("/logs")
+    public String showLogs(Model model) {
+        Iterable<ActionLog> logs = ActionLogRepo.findAll();
+        model.addAttribute("logs", logs);
+        model.addAttribute("title", "Журнал дій");
+        return "logs";
+    }
 
 
 
@@ -153,10 +179,15 @@ public class MainController {
                 b.setValue(b.getValue() - 1); // Зменшуємо кількість доступних книг
                 userRepo.save(u);
                 AriRepo.save(b);
+
+                // Додати запис до журналу дій
+                ActionLog log = new ActionLog("Видача книги", "Користувач " + u.getName() + " отримав книгу '" + b.getTitle() + "'");
+                ActionLogRepo.save(log);
             }
         }
         return "redirect:/users"; // Перенаправлення після успішної видачі
     }
+
 
 
 }
