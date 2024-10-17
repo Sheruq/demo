@@ -110,25 +110,16 @@ public class UserController {
     }
 
     @GetMapping("/users/search")
-    public String search(@RequestParam(required = false) String bookTitle,
-                         @RequestParam(required = false) String userName,
-                         Model model) {
-        Iterable<User> users = userRepo.findAll();
-        Iterable<Arina> books = ariRepo.findAll();
-
-        if (bookTitle != null && !bookTitle.isEmpty()) {
-            books = ariRepo.findByTitleContainingIgnoreCase(bookTitle); // Пошук книг за назвою
-        }
-
-        if (userName != null && !userName.isEmpty()) {
-            users = userRepo.findByNameContainingIgnoreCase(userName); // Пошук користувачів за іменем
-        }
+    public String search(@RequestParam(required = false) String query, Model model) {
+        Iterable<User> users = userRepo.findByNameContainingIgnoreCase(query); // Пошук користувачів
+        Iterable<Arina> books = ariRepo.findByTitleContainingIgnoreCase(query); // Пошук книг
 
         model.addAttribute("users", users);
         model.addAttribute("books", books);
         model.addAttribute("title", "Пошук");
         return "users"; // Шаблон, який відображає результати
     }
+
 
 
 }
