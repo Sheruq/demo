@@ -11,14 +11,10 @@ public class User {
     private Long id;
     private String name;
     private String email;
+    private String password; // Поле для пароля
 
     @ManyToMany
     private List<Arina> borrowedBooks = new ArrayList<>(); // Ініціалізуємо список
-
-    public void removeBook(Arina book) {
-        this.borrowedBooks.remove(book); // Вилучаємо книгу з списку
-    }
-
 
     // Конструктори
     public User() {
@@ -54,6 +50,14 @@ public class User {
         this.email = email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public List<Arina> getBorrowedBooks() {
         return borrowedBooks;
     }
@@ -65,5 +69,9 @@ public class User {
     // Додавання книги до списку
     public void addBook(Arina book) {
         this.borrowedBooks.add(book);
+    }
+
+    public void removeBook(Arina book) {
+        this.borrowedBooks.remove(book);
     }
 }

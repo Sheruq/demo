@@ -44,16 +44,16 @@ public class UserController {
         return "add_user";
     }
 
-
     @PostMapping("/users/add")
     public String addUser(@RequestParam String name, @RequestParam String email) {
-        User user = new User(name, email);
+        User user = new User(name, email); // Тепер це працює
         userRepo.save(user);
         // Додати запис до журналу дій
         ActionLog log = new ActionLog("Додавання користувача", "Користувач " + user.getName() + " був доданий");
         ActionLogRepo.save(log);
         return "redirect:/users";
     }
+
 
     @PostMapping("/users/{userId}/borrow")
     public String borrowBook(@PathVariable("userId") long userId, @RequestParam("bookId") long bookId) {
